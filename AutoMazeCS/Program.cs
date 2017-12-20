@@ -5,8 +5,13 @@ namespace AutoMazeCS
 {
     class Program
     {
+
+        // Dimenstions of the maps. Used in DrawMap()
        public const int WIDTH = 20;
        public const int HEIGHT = 20;
+
+        public static char[,] map = new char[HEIGHT, WIDTH]; // Used to set the desired maze to solve
+        public static int wait; // Used to specify the wait.
 
          public static char[,] map1 = new char[8, 8]
         {
@@ -47,8 +52,10 @@ namespace AutoMazeCS
         };
        
 
-        public static void DrawMap(char[,] map)
+        public static void DrawMap()
         {
+            //sets current map to whichever map is selected in Main()
+
             for (int i = 0; i < HEIGHT; i++)
             {
                 for (int u = 0; u < WIDTH; u++)
@@ -57,16 +64,20 @@ namespace AutoMazeCS
                 }
             }
 
+            // assigns every bot's icon to the map array at tis location. 
+            // Also takes care of bug where if a bot died on a comma it would freak out.
+
             foreach (var player in Player.mPlayers)
             {
                 if (Player.currentMap[player.X, player.Y] == ',')
                 {
                     Player.currentMap[player.X, player.Y] = ' ';
-                    
                 }
                 else
                 Player.currentMap[player.X, player.Y] = player.icon;
             }
+
+            //Draws the map
 
             for (int i = 0; i < HEIGHT; i++)
             {
@@ -79,18 +90,18 @@ namespace AutoMazeCS
 
         }
 
+        //Entry point of the program
+
         static void Main(string[] args)
         {
-            
+            map = map2; // Set the map here.
+            wait = 100; // Set the wait between ticks/loops in milliseconds
 
-            Player parent = new Player(1, 2);
-            Player.mPlayers.Add(parent);
+            Player parent = new Player(1, 2); // Set the start coordinates of the parent bot.
+            Player.mPlayers.Add(parent); // Adds the parent to the Master list.
 
-            /*Player parent2 = new Player(6, 1);
-            Player.mPlayers.Add(parent2);*/
-
-            DrawMap(map2);
-            parent.Check();
+            DrawMap(); // Draws the map to the screen for the first time
+            parent.Check(); // Starts the parant bots loop.
 
             Console.ReadLine();
         }
