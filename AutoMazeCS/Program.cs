@@ -6,14 +6,15 @@ namespace AutoMazeCS
     class Program
     {
 
-        // Dimenstions of the maps. Used in DrawMap()
-       public const int WIDTH = 20;
-       public const int HEIGHT = 20;
+        // Determined in the Maze method GenMaze(), randomly generated.
+        public static int BotStartX;
+        public static int BotStartY;
 
-        public static char[,] map = new char[HEIGHT, WIDTH]; // Used to set the desired maze to solve
+        public static Maze map; // Used to set the desired maze to solve
         public static int wait; // Used to specify the wait.
-
-         public static char[,] map1 = new char[8, 8]
+            
+        // Two pre defined mazes for testing before random generation was implemented.
+        public static char[,] map1 = new char[8, 8]
         {
             {'#','#','#','#','#','#','#','#'},
             {'#',' ',' ',' ',' ','#','$','#' },
@@ -25,7 +26,6 @@ namespace AutoMazeCS
             {'#','#','#','#','#','#','#','#' }
 
         };
-
         public static char[,] map2 = new char[20, 20]
         {
             {'#', '#', '#', '#', '#', '#', '#', '#','#', '#', '#', '#','#', '#', '#', '#','#', '#', '#', '#' },
@@ -51,18 +51,11 @@ namespace AutoMazeCS
 
         };
        
-
-        public static void DrawMap()
+        // Draws the map to the screen.
+        public static void DrawMap(Maze map)
         {
-            //sets current map to whichever map is selected in Main()
-
-            for (int i = 0; i < HEIGHT; i++)
-            {
-                for (int u = 0; u < WIDTH; u++)
-                {
-                    Player.currentMap[u, i] = map[u, i]; 
-                }
-            }
+    
+            Player.currentMap= map.maze; 
 
             // assigns every bot's icon to the map array at tis location. 
             // Also takes care of bug where if a bot died on a comma it would freak out.
@@ -79,10 +72,10 @@ namespace AutoMazeCS
 
             //Draws the map
 
-            for (int i = 0; i < HEIGHT; i++)
+            for (int i = 0; i < map.WIDTH; i++)
             {
                 Console.Write("\n");
-                for (int u = 0; u < WIDTH; u++)
+                for (int u = 0; u < map.HEIGHT; u++)
                 {
                     Console.Write(Player.currentMap[u, i]);
                 }
@@ -94,16 +87,16 @@ namespace AutoMazeCS
 
         static void Main(string[] args)
         {
-            map = map2; // Set the map here.
+            map = new Maze(20, 20); // Set the map here. the two numbers are used to specify dimensions, WIDTH by HEIGHT.
             wait = 100; // Set the wait between ticks/loops in milliseconds
-
-            Player parent = new Player(1, 2); // Set the start coordinates of the parent bot.
+            
+            Player parent = new Player(BotStartX, BotStartY); // Set the start coordinates of the parent bot.
             Player.mPlayers.Add(parent); // Adds the parent to the Master list.
 
-            DrawMap(); // Draws the map to the screen for the first time
-            parent.Check(); // Starts the parant bots loop.
+            DrawMap(map); // Draws the map to the screen for the first time
+                         //parent.Check(); // Starts the parent bots loop.
 
-            Console.ReadLine();
+            Console.Read();
         }
     }
 }

@@ -1,33 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
-using static AutoMazeCS.Player;
 
 namespace AutoMazeCS
 {
-    class Player
+    class Player : Entity
     {
-        // The bot's previous co-ords, used as the spot to spawn child bots when the parent reaches an intersection.
-        int PrevX;
-        int PrevY;
-    
+
+        public char icon;
+
         // the current map
-        public static char[,] currentMap = new char[Program.WIDTH, Program.HEIGHT];
-
-        // Directions, used as arguements to decide where to move. Used so a the full code snippet of moving somewhere can be ommited
-        public enum Directions { Left, Right, Up, Down };
-
-        // A list of directions that a bot can take at each tick / loop, resets when it moves to a new tile.
-        public List<Directions> mDirections = new List<Directions>();
+        public static char[,] currentMap;
 
         // The master list of all bots, used to draw all bots at once in DrawMap()
         public static List<Player> mPlayers = new List<Player>();
-
-        // A bots properties: it's icon, X and Y co-ords.
-        public char icon;
-        public int X;
-        public int Y;
 
         // If a bot reaches the '$', this paues the simulation and prints Solved to the screen.
         public void Win()
@@ -141,22 +127,22 @@ namespace AutoMazeCS
             {
                 case 0:
                     Y++;
-                    Program.map[X, Y - 1] = ',';
+                    Program.map.maze[X, Y - 1] = ',';
                     break;
 
                 case 1:
                     Y--;
-                    Program.map[X, Y + 1] = ',';
+                    Program.map.maze[X, Y + 1] = ',';
                     break;
 
                 case 2:
                     X--;
-                    Program.map[X + 1, Y] = ',';
+                    Program.map.maze[X + 1, Y] = ',';
                     break;
 
                 case 3:
                     X++;
-                    Program.map[X - 1, Y] = ',';
+                    Program.map.maze[X - 1, Y] = ',';
                     break;
             }
 
@@ -178,14 +164,11 @@ namespace AutoMazeCS
             }
             
             Console.Clear();
-            Program.DrawMap();
+            Program.DrawMap(Program.map);
             mDirections = new List<Directions>();
             Check();
             
         }
-
-        
-
 
     }
 }
